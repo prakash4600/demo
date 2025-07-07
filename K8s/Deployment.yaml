@@ -1,0 +1,30 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: demogit 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demogit
+  template:
+    metadata:
+      labels:
+        app: demogit 
+    spec:
+      containers:
+        - name: demogit 
+          image: <IMAGE>
+          ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: demogit
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 80 
+    selector:
+        app: demogit
