@@ -37,7 +37,7 @@ pipeline {
 
     stage('Login to ACR') {
       steps {
-        sh "az acr login --name $ACR_NAME"
+        sh "az acr login --name $ACR_NAME --expose-token"
       }
     }
 
