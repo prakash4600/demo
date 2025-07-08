@@ -2,17 +2,18 @@ pipeline {
   agent any
 
   environment {
-    ACR_NAME = 'demogit.azurecr.io'     // replace with your ACR FQDN
-    IMAGE_NAME = 'myapp'                   // replace with your app/image name
-    TENANT_ID = '3b6e02a4-df52-4727-ab5f-876c0e1261d6  '         // your Azure tenant ID
-    SUBSCRIPTION_ID = '01ca380c-fcf2-4075-8c67-82b2de4de29a'   // your Azure subscription ID
+    ACR_NAME = 'demogit'                             // only ACR name (no domain)
+    ACR_NAME_FULL = 'demogit.azurecr.io'             // full domain for tagging
+    IMAGE_NAME = 'myapp'
+    TENANT_ID = '3b6e02a4-df52-4727-ab5f-876c0e1261d6'
+    SUBSCRIPTION_ID = '01ca380c-fcf2-4075-8c67-82b2de4de29a'
   }
 
   stages {
 
     stage('Checkout Code') {
       steps {
-        git 'https://github.com/prakash4600/demo.git'   // ✅ replace with your repo
+        git 'https://github.com/prakash4600/demo.git'
       }
     }
 
@@ -38,30 +39,22 @@ pipeline {
       }
     }
 
-    stage('ACR Login') {
+    stage('Login to ACR') {
       steps {
-        sh "az acr login --name ${ACR_NAME%%.azurecr.io}"
+        sh "az acr login --name $ACR_NAME"
       }
     }
 
-    stage('Build Docker Image') {
+    stage('Build and Push Docker Image') {
       steps {
         script {
-          IMAGE_TAG_LATEST = "${ACR_NAME}/${IMAGE_NAME}:latest"
-          IMAGE_TAG_BUILD  = "${ACR_NAME}/${IMAGE_NAME}:${BUILD_NUMBER}"
-          sh """
-            docker build -t $IMAGE_TAG_LATEST -t $IMAGE_TAG_BUILD .
-          """
-        }
-      }
-    }
+          def image_latest = "${ACR_NAME_FULL}/${IMAGE_NAME}:latest"
+          def image_build = "${ACR_NAME_FULL}/${IMAGE_NAME}:${BUILD_NUMBER}"
 
-    stage('Push Docker Image to ACR') {
-      steps {
-        script {
           sh """
-            docker push ${ACR_NAME}/${IMAGE_NAME}:latest
-            docker push ${ACR_NAME}/${IMAGE_NAME}:${BUILD_NUMBER}
+            docker build -t $image_latest -t $image_build .
+            docker push $image_latest
+            docker push $image_build
           """
         }
       }
