@@ -30,18 +30,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Login to ACR
-        run: az acr login --name ${{ env.AZURE_CONTAINER_REGISTRY }}
-
-      - name: Build Docker image
-        run: | 
-            docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} .
-
-      - name: Push image to ACR
+      - name: Build & Push image to ACR
         run: |
-          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
+          az acr build \
+            --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} \
+            --registry ${{ env.AZURE_CONTAINER_REGISTRY }} \
+            -g ${{ env.RESOURCE_GROUP }} \
+          .
 
-            .
 
   deploy:
     name: Deploy to AKS
