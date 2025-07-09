@@ -35,12 +35,17 @@ pipeline {
       }
     }
 
-    stage('Login to ACR') {
-      steps {
-        sh "az acr login --name $ACR_NAME --expose-token"
-      }
+    stage('Docker Login') {
+    steps {
+        script {
+            sh '''
+                USERNAME=$(az acr credential show --name demogit --query "username" -o tsv)
+                PASSWORD=$(az acr credential show --name demogit --query "passwords[0].value" -o tsv)
+                echo "$PASSWORD" | docker login demogit.azurecr.io -u "$USERNAME" --password-stdin
+            '''
+        }
     }
-
+}
     stage('Build Docker Image') {
       steps {
         script {
