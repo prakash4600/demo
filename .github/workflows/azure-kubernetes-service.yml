@@ -35,9 +35,9 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_CONTAINER_REGISTRY: "your-azure-container-registry"
-  CONTAINER_NAME: "your-container-name"
-  RESOURCE_GROUP: "your-resource-group"
+  AZURE_CONTAINER_REGISTRY: "demogit"
+  CONTAINER_NAME: "github"
+  RESOURCE_GROUP: "Rahul"
   CLUSTER_NAME: "your-cluster-name"
   DEPLOYMENT_MANIFEST_PATH: "your-deployment-manifest-path"
 
