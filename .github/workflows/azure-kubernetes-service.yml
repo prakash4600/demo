@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY: "githubb"                           # ACR name (no .azurecr.io)
-  CONTAINER_NAME: "github"                                      # Docker image name
+  CONTAINER_NAME: "bhanuprakash"                                      # Docker image name
   RESOURCE_GROUP: "Rahul"                                       # Resource Group where AKS and ACR exist
   CLUSTER_NAME: "your-cluster-name"                             # Your AKS cluster name
   DEPLOYMENT_MANIFEST_PATH: "manifests/deployment.yaml"         # Path to your Kubernetes manifest
