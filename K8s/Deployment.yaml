@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: demogit 
-          image: <IMAGE>
+          image: demogit.azurecr.io/myapp:latest
           ports:
           - containerPort: 80
 ---
